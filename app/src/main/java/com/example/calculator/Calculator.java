@@ -1,7 +1,6 @@
 package com.example.calculator;
 
 import android.content.Context;
-import android.graphics.Path;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,111 +12,198 @@ import java.util.Map;
 
 public class Calculator {
     private CalculatorEngine engine;
-    private CalculatorPrinter printer;
+    private CalculatorPrinter resultPrinter;
+    private CalculatorPrinter expPrinter;
+    private CalculatorMemory mem1;
+    private CalculatorMemory mem2;
 
-    private boolean digitClicked = false;
     private Context ctx;
 
-    Calculator(TextView textView, Map<CalcButton, Button> buttonMap,
+    private CalcButton lastButtonPressed = CalcButton.INIT;
+
+    public static final String MINUS = "-";
+    public static final String DIVIDE = "/";
+    public static final String PLUS = "+";
+    public static final String MULTIPLICATION = "x";
+    public static final String COMA = ".";
+
+    public enum Operation {
+        ADD, SUB, DIV, MUL
+    }
+
+
+    Calculator(TextView resultView, TextView expView, Map<CalcButton, Button> buttonMap,
                ArrayList<Button> digitButtons, Context ctx) {
-        this.printer = new CalculatorPrinter(textView);
+        this.resultPrinter = new CalculatorPrinter(resultView);
+        this.expPrinter = new CalculatorPrinter(expView);
         this.engine = new CalculatorEngine();
+        this.mem1 = new CalculatorMemory();
+        this.mem2 = new CalculatorMemory();
         this.ctx = ctx;
 
-        for (int i=0; i<10; i++) {
+        for (int i = 0; i < 10; i++) {
             int finalI = i;
             digitButtons.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    printer.append(String.valueOf(finalI));
-                    digitClicked = true;
-                    Log.wtf("CALC", "Digit true");
+                    expPrinter.append(String.valueOf(finalI));
+                    lastButtonPressed = CalcButton.NUMBER;
                 }
             });
         }
 
-        buttonMap.get(CalcButton.CE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                printer.reset();
-                engine.reset();
-            }
-        });
-
         buttonMap.get(CalcButton.PLUS).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (digitClicked) {
-                    engine.add(Double.parseDouble(printer.getString()));
-                    Double result = engine.getResult();
-                    printer.printAndClear(result.toString());
-                    digitClicked = false;
+                if (expPrinter.isLastOp()) {
+                    Log.wtf("CALC", "last is op");
+                    expPrinter.swapLastOp(Operation.ADD);
                 } else {
-                    engine.setOp(CalculatorEngine.Operation.ADD);
+                    expPrinter.append(PLUS);
                 }
+                lastButtonPressed = CalcButton.PLUS;
             }
         });
 
         buttonMap.get(CalcButton.MINUS).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (digitClicked) {
-                    engine.sub(Double.parseDouble(printer.getString()));
-                    Double result = engine.getResult();
-                    printer.printAndClear(result.toString());
-                    digitClicked = false;
+                if (expPrinter.isLastOp()) {
+                    expPrinter.swapLastOp(Operation.SUB);
                 } else {
-                    engine.setOp(CalculatorEngine.Operation.SUB);
+                    expPrinter.append(MINUS);
                 }
-            }
-        });
-
-        buttonMap.get(CalcButton.MULTIPLY).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (digitClicked) {
-                    engine.mul(Double.parseDouble(printer.getString()));
-                    Double result = engine.getResult();
-                    printer.printAndClear(result.toString());
-                    digitClicked = false;
-                } else {
-                    engine.setOp(CalculatorEngine.Operation.MUL);
-                }
+                lastButtonPressed = CalcButton.MINUS;
             }
         });
 
         buttonMap.get(CalcButton.DIVIDE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (digitClicked) {
-                    if (printer.getString().equals("0.0") || printer.getString().equals("0")) {
-                        Toast.makeText(ctx, "Zero Division, go back to school!",
-                                Toast.LENGTH_SHORT).show();
-
-                    } else{
-                        engine.div(Double.parseDouble(printer.getString()));
-                        Double result = engine.getResult();
-                        printer.printAndClear(result.toString());
-                        digitClicked = false;
-                    }
+                if (expPrinter.isLastOp()) {
+                    expPrinter.swapLastOp(Operation.DIV);
                 } else {
-                    engine.setOp(CalculatorEngine.Operation.DIV);
+                    expPrinter.append(DIVIDE);
                 }
+                lastButtonPressed = CalcButton.DIVIDE;
+            }
+        });
+
+        buttonMap.get(CalcButton.MULTIPLY).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (expPrinter.isLastOp()) {
+                    expPrinter.swapLastOp(Operation.MUL);
+                } else {
+                    expPrinter.append(MULTIPLICATION);
+                }
+                lastButtonPressed = CalcButton.MULTIPLY;
             }
         });
 
         buttonMap.get(CalcButton.EQUALS).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (digitClicked) {
-                    engine.calculate(Double.parseDouble(printer.getString()));
-                    Double result = engine.getResult();
-                    printer.printAndClear(result.toString());
-                    digitClicked = false;
-//                }
+                try {
+                    Double result = engine.eval(expPrinter.getString());
+                    resultPrinter.append(String.valueOf(result));
+                    resultPrinter.clear();
+//                    expPrinter.clear();
+                } catch (ArithmeticException e) {
+                    Toast.makeText(ctx, "Zero Division in expression, go back to school!",
+                            Toast.LENGTH_LONG).show();
+                }
+                lastButtonPressed = CalcButton.EQUALS;
             }
         });
+
+        buttonMap.get(CalcButton.BACK).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expPrinter.removeLastChar();
+                expPrinter.append("");
+                lastButtonPressed = CalcButton.BACK;
+            }
+        });
+
+        buttonMap.get(CalcButton.CE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expPrinter.reset();
+                lastButtonPressed = CalcButton.CE;
+            }
+        });
+
+        buttonMap.get(CalcButton.AC).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expPrinter.reset();
+                resultPrinter.reset();
+                mem1.reset();
+                mem2.reset();
+                lastButtonPressed = CalcButton.AC;
+            }
+        });
+
+        buttonMap.get(CalcButton.SAVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ctx, "Please choose memory!",
+                        Toast.LENGTH_LONG).show();
+                lastButtonPressed = CalcButton.SAVE;
+            }
+        });buttonMap.get(CalcButton.MEM1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lastButtonPressed.equals(CalcButton.SAVE)) {
+                    mem1.setValue(Double.parseDouble(resultPrinter.getString()));
+                    Toast.makeText(ctx, "Value saved to Memory1!",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    if (mem1.isSaved()) {
+                        if (!expPrinter.isLastOp() && expPrinter.getLength() >0) {
+                            expPrinter.append(PLUS);
+                        }
+                        expPrinter.append(String.valueOf(mem1.getValue()));
+                    } else {
+                        Toast.makeText(ctx, "Nothing stored in Memory1!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+                lastButtonPressed = CalcButton.MEM1;
+            }
+        });
+
+        buttonMap.get(CalcButton.MEM2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lastButtonPressed.equals(CalcButton.SAVE)) {
+                    mem2.setValue(Double.parseDouble(resultPrinter.getString()));
+                    Toast.makeText(ctx, "Value savedd to Memory2!",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    if (mem2.isSaved()) {
+                        if (!expPrinter.isLastOp() && expPrinter.getLength() >0) {
+                            expPrinter.append(PLUS);
+                        }
+                        expPrinter.append(String.valueOf(mem2.getValue()));
+                    } else {
+                        Toast.makeText(ctx, "Nothing store in Memory2!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+                lastButtonPressed = CalcButton.MEM2;
+            }
+        });
+
+        buttonMap.get(CalcButton.COMA).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expPrinter.append(COMA);
+                lastButtonPressed = CalcButton.COMA;
+            }
+        });
+
+
     }
-
-
 }
