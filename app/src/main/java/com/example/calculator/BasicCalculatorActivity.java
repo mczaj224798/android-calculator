@@ -21,6 +21,15 @@ public class BasicCalculatorActivity extends AppCompatActivity {
 
     private TextView resultView, expView;
 
+    private Calculator calculator;
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putString("exp", this.calculator.expPrinter.getString());
+        savedInstanceState.putString("res", this.calculator.resultPrinter.getString());
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +93,12 @@ public class BasicCalculatorActivity extends AppCompatActivity {
         buttonSave = (Button) findViewById(R.id.buttonSave);
         buttonMap.put(CalcButton.SAVE, buttonSave);
 
-        Calculator calculator = new Calculator(resultView, expView, buttonMap, digitButtons, getApplicationContext());
+        this.calculator = new Calculator(resultView, expView, buttonMap, digitButtons, getApplicationContext());
+
+        if ( savedInstanceState != null ) {
+            this.calculator.resultPrinter.append(savedInstanceState.getString("res"));
+            this.calculator.expPrinter.append(savedInstanceState.getString("exp"));
+        }
+
     }
 }

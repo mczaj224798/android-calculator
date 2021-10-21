@@ -3,6 +3,7 @@ package com.example.calculator;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -18,13 +19,27 @@ public class AdvancedCalculatorActivity extends AppCompatActivity {
 
     private Button buttonComma, buttonPlus, buttonMinus, buttonMulti, buttonDiv, buttonEquals;
     private Button buttonCE,  buttonAC,  buttonBack, buttonSave, buttonMem1, buttonMem2;
+    private Button buttonSin, buttonCos, buttonTan, buttonLog, buttonLn, buttonSqrt, buttonX2;
+    private Button buttonXY, buttonPercent;
+    private Calculator calculator;
 
     private TextView resultView, expView;
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Log.wtf("SAVE", "exp=" + this.calculator.expPrinter.getString());
+        Log.wtf("SAVE", "exp=" + this.calculator.resultPrinter.getString());
+
+        savedInstanceState.putString("exp", this.calculator.expPrinter.getString());
+        savedInstanceState.putString("res", this.calculator.resultPrinter.getString());
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.basic_calculator_activity);
+
+        setContentView(R.layout.advanced_calculator_activity);
 
         resultView = (TextView) findViewById(R.id.resultView);
         expView = (TextView) findViewById(R.id.expView);
@@ -84,6 +99,39 @@ public class AdvancedCalculatorActivity extends AppCompatActivity {
         buttonSave = (Button) findViewById(R.id.buttonSave);
         buttonMap.put(CalcButton.SAVE, buttonSave);
 
-        Calculator calculator = new Calculator(resultView, expView, buttonMap, digitButtons, getApplicationContext());
+        buttonSin =(Button) findViewById(R.id.buttonSin);
+        buttonMap.put(CalcButton.SIN, buttonSin);
+
+        buttonCos =(Button) findViewById(R.id.buttonCos);
+        buttonMap.put(CalcButton.COS, buttonCos);
+
+        buttonTan =(Button) findViewById(R.id.buttonTan);
+        buttonMap.put(CalcButton.TAN, buttonTan);
+
+        buttonLog =(Button) findViewById(R.id.buttonLog);
+        buttonMap.put(CalcButton.LOG, buttonLog);
+
+        buttonLn =(Button) findViewById(R.id.buttonLn);
+        buttonMap.put(CalcButton.LN, buttonLn);
+
+        buttonSqrt =(Button) findViewById(R.id.buttonSqrt);
+        buttonMap.put(CalcButton.SQRT, buttonSqrt);
+
+        buttonX2 =(Button) findViewById(R.id.buttonSquare);
+        buttonMap.put(CalcButton.X2, buttonX2);
+
+        buttonXY =(Button) findViewById(R.id.buttonSquareY);
+        buttonMap.put(CalcButton.XY, buttonXY);
+
+        buttonPercent =(Button) findViewById(R.id.buttonPro);
+        buttonMap.put(CalcButton.PERCENT, buttonPercent);
+
+        this.calculator = new AdvancedCalculator(resultView, expView, buttonMap, digitButtons, getApplicationContext());
+        if (savedInstanceState != null) {
+            this.calculator.resultPrinter.append(savedInstanceState.getString("res"));
+            this.calculator.expPrinter.append(savedInstanceState.getString("exp"));
+            Log.wtf("LOAD", "exp=" + savedInstanceState.getString("exp"));
+            Log.wtf("LOAD", "res=" + savedInstanceState.getString("res"));
+        }
     }
 }

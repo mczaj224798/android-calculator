@@ -7,19 +7,20 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 
 public class Calculator {
-    private CalculatorEngine engine;
-    private CalculatorPrinter resultPrinter;
-    private CalculatorPrinter expPrinter;
-    private CalculatorMemory mem1;
-    private CalculatorMemory mem2;
+    protected CalculatorEngine engine;
+    protected CalculatorPrinter resultPrinter;
+    protected CalculatorPrinter expPrinter;
+    protected CalculatorMemory mem1;
+    protected CalculatorMemory mem2;
 
-    private Context ctx;
+    protected Context ctx;
 
-    private CalcButton lastButtonPressed = CalcButton.INIT;
+    protected CalcButton lastButtonPressed = CalcButton.INIT;
 
     public static final String MINUS = "-";
     public static final String DIVIDE = "/";
@@ -34,8 +35,8 @@ public class Calculator {
 
     Calculator(TextView resultView, TextView expView, Map<CalcButton, Button> buttonMap,
                ArrayList<Button> digitButtons, Context ctx) {
-        this.resultPrinter = new CalculatorPrinter(resultView);
-        this.expPrinter = new CalculatorPrinter(expView);
+        this.resultPrinter = new CalculatorPrinter(resultView, 18);
+        this.expPrinter = new CalculatorPrinter(expView, 21);
         this.engine = new CalculatorEngine();
         this.mem1 = new CalculatorMemory();
         this.mem2 = new CalculatorMemory();
@@ -106,11 +107,19 @@ public class Calculator {
             public void onClick(View v) {
                 try {
                     Double result = engine.eval(expPrinter.getString());
-                    resultPrinter.append(String.valueOf(result));
-                    resultPrinter.clear();
+                    if ( result.toString().length() > 18) {
+                        DecimalFormat format = new DecimalFormat("0.####E0");
+                        format.setMaximumFractionDigits(4);
+                        format.setMinimumFractionDigits(0);
+                        resultPrinter.clear();
+                        resultPrinter.append(format.format(result));
+                    } else {
+                        resultPrinter.clear();
+                        resultPrinter.append(result.toString());
+                    }
 //                    expPrinter.clear();
                 } catch (ArithmeticException e) {
-                    Toast.makeText(ctx, "Zero Division in expression, go back to school!",
+                    Toast.makeText(ctx, "Zero Division or malformed expression, go back to school!",
                             Toast.LENGTH_LONG).show();
                 }
                 lastButtonPressed = CalcButton.EQUALS;
@@ -156,7 +165,7 @@ public class Calculator {
             @Override
             public void onClick(View v) {
                 if (lastButtonPressed.equals(CalcButton.SAVE)) {
-                    mem1.setValue(Double.parseDouble(resultPrinter.getString()));
+                    mem1.setValue(Double.parseDouble(resultPrinter.getPrintedString()));
                     Toast.makeText(ctx, "Value saved to Memory1!",
                             Toast.LENGTH_LONG).show();
                 } else {
@@ -178,7 +187,7 @@ public class Calculator {
             @Override
             public void onClick(View v) {
                 if (lastButtonPressed.equals(CalcButton.SAVE)) {
-                    mem2.setValue(Double.parseDouble(resultPrinter.getString()));
+                    mem2.setValue(Double.parseDouble(resultPrinter.getPrintedString()));
                     Toast.makeText(ctx, "Value savedd to Memory2!",
                             Toast.LENGTH_LONG).show();
                 } else {

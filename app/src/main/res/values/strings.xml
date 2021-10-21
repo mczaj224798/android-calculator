@@ -27,6 +27,16 @@
     <string name="advancedCalculator">Advanced Calculator</string>
     <string name="about">About</string>
     <string name="exit">Exit</string>
+    <string name="sin">sin</string>
+    <string name="cos">cos</string>
+    <string name="tan">tan</string>
+    <string name="square">x^2</string>
+    <string name="squarey">x^y</string>
+    <string name="log">log</string>
+    <string name="ln">ln</string>
+    <string name="pro">%</string>
+    <string name="sqrt">sqrt</string>
+
     <string name="aboutContent">Calculator Mobile Application\nCreated by Maciej Czajkowski
     as an excercise.\nApplication can handle both basic and advanced calculations</string>
 </resources>

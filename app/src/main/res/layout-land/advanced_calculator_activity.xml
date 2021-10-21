@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BasicCalculatorActivity">
+    tools:context=".AdvancedCalculatorActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -34,7 +34,7 @@
             android:textSize="30dp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="360dp"
+            android:layout_width="540dp"
             android:layout_height="240dp">
 
 
@@ -199,7 +199,7 @@
                 android:layout_height="60dp"
                 android:text="@string/coma"
                 app:layout_constraintStart_toEndOf="@+id/button4"
-                app:layout_constraintTop_toBottomOf="@+id/buttonEquals" />
+                app:layout_constraintTop_toBottomOf="@+id/buttonPro" />
 
             <Button
                 android:id="@+id/buttonDiv"
@@ -210,14 +210,84 @@
                 app:layout_constraintTop_toBottomOf="@+id/buttonCE" />
 
             <Button
-                android:id="@+id/buttonEquals"
+                android:id="@+id/buttonPro"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:text="@string/equals"
                 app:layout_constraintStart_toEndOf="@+id/button9"
                 app:layout_constraintTop_toBottomOf="@+id/buttonDiv" />
 
+            <Button
+                android:id="@+id/buttonSin"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintStart_toEndOf="@+id/buttonCE"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/sin" />
 
+            <Button
+                android:id="@+id/buttonCos"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintStart_toEndOf="@+id/buttonSin"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/cos" />
+
+            <Button
+                android:id="@+id/buttonTan"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintStart_toEndOf="@+id/buttonDiv"
+                app:layout_constraintTop_toBottomOf="@id/buttonSin"
+                android:text="@string/tan" />
+
+            <Button
+                android:id="@+id/buttonLog"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintStart_toEndOf="@+id/buttonTan"
+                app:layout_constraintTop_toBottomOf="@id/buttonCos"
+                android:text="@string/log" />
+
+            <Button
+                android:id="@+id/buttonSqrt"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintStart_toEndOf="@+id/buttonPro"
+                app:layout_constraintTop_toBottomOf="@id/buttonTan"
+                android:text="@string/sqrt" />
+
+            <Button
+                android:id="@+id/buttonLn"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintStart_toEndOf="@+id/buttonSqrt"
+                app:layout_constraintTop_toBottomOf="@id/buttonLog"
+                android:text="@string/ln" />
+
+            <Button
+                android:id="@+id/buttonSquare"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintStart_toEndOf="@+id/buttonComa"
+                app:layout_constraintTop_toBottomOf="@id/buttonSqrt"
+                android:text="@string/square" />
+
+            <Button
+                android:id="@+id/buttonSquareY"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintStart_toEndOf="@+id/buttonSquare"
+                app:layout_constraintTop_toBottomOf="@id/buttonLn"
+                android:text="@string/squarey" />
+
+            <Button
+                android:id="@+id/buttonEquals"
+                android:layout_width="60dp"
+                android:layout_height="240dp"
+                app:layout_constraintStart_toEndOf="@+id/buttonCos"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/equals" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -6,16 +6,18 @@ import android.widget.TextView;
 
 public class CalculatorPrinter {
 
-    private final int MAX_VISIBLE_LENGTH= 21;
     StringBuilder builder = new StringBuilder();
     TextView view;
+    int limit;
 
-    CalculatorPrinter(TextView view) {
+    CalculatorPrinter(TextView view, int limit) {
         this.view = view;
+        this.limit = limit;
     }
 
     public void append(String text){
         this.builder.append(text);
+        Log.wtf("append", "text=" + this.builder.toString());
         print();
 //        String string = builder.toString();
 //        this.view.setText(string);
@@ -93,17 +95,24 @@ public class CalculatorPrinter {
         }
     }
 
-    public String getString() {
+    public String getPrintedString() {
         return this.view.getText().toString();
     }
 
+    public String getString() {
+        return this.builder.toString();
+    }
+
+
     private void print() {
         String text = this.builder.toString();
-        if (text.length() > MAX_VISIBLE_LENGTH) {
-            text.substring(text.length() - MAX_VISIBLE_LENGTH + 3);
-            text = "..." + text;
+        if (text.length() > this.limit) {
+//            Log.wtf("print", "lenght=" + text.length());
+//            Log.wtf("print", "calculated=" + (text.length() - this.limit + 3));
+            text = "..." + text.substring(text.length() - this.limit + 3);
         }
-//        Log.wtf("print", text);
+        Log.wtf("print", text);
+        this.view.setText("");
         this.view.setText(text);
     }
 }
