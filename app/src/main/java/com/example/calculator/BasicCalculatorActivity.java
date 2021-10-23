@@ -17,7 +17,8 @@ public class BasicCalculatorActivity extends AppCompatActivity {
             button4, button5, button6, button7, button8, button9;
 
     private Button buttonComma, buttonPlus, buttonMinus, buttonMulti, buttonDiv, buttonEquals;
-    private Button buttonCE,  buttonAC,  buttonBack, buttonSave, buttonMem1, buttonMem2;
+    private Button buttonCE,  buttonAC,  buttonBack, buttonSave, buttonMem1, buttonMem2,
+            buttonBracketsOpen, buttonBracketsClose;
 
     private TextView resultView, expView;
 
@@ -92,6 +93,12 @@ public class BasicCalculatorActivity extends AppCompatActivity {
 
         buttonSave = (Button) findViewById(R.id.buttonSave);
         buttonMap.put(CalcButton.SAVE, buttonSave);
+
+        buttonBracketsOpen = (Button) findViewById(R.id.buttonBracketsOpen);
+        buttonMap.put(CalcButton.BRACKETS_OPEN, buttonBracketsOpen);
+
+        buttonBracketsClose =(Button) findViewById(R.id.buttonBracketsClose);
+        buttonMap.put(CalcButton.BRACKETS_CLOSE, buttonBracketsClose);
 
         this.calculator = new Calculator(resultView, expView, buttonMap, digitButtons, getApplicationContext());
 

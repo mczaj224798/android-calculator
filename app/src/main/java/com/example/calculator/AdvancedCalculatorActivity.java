@@ -20,7 +20,7 @@ public class AdvancedCalculatorActivity extends AppCompatActivity {
     private Button buttonComma, buttonPlus, buttonMinus, buttonMulti, buttonDiv, buttonEquals;
     private Button buttonCE,  buttonAC,  buttonBack, buttonSave, buttonMem1, buttonMem2;
     private Button buttonSin, buttonCos, buttonTan, buttonLog, buttonLn, buttonSqrt, buttonX2;
-    private Button buttonXY, buttonPercent;
+    private Button buttonXY, buttonPercent, buttonBracketsOpen, buttonBracketsClose;
     private Calculator calculator;
 
     private TextView resultView, expView;
@@ -125,6 +125,12 @@ public class AdvancedCalculatorActivity extends AppCompatActivity {
 
         buttonPercent =(Button) findViewById(R.id.buttonPro);
         buttonMap.put(CalcButton.PERCENT, buttonPercent);
+
+        buttonBracketsOpen = (Button) findViewById(R.id.buttonBracketsOpen);
+        buttonMap.put(CalcButton.BRACKETS_OPEN, buttonBracketsOpen);
+
+        buttonBracketsClose =(Button) findViewById(R.id.buttonBracketsClose);
+        buttonMap.put(CalcButton.BRACKETS_CLOSE, buttonBracketsClose);
 
         this.calculator = new AdvancedCalculator(resultView, expView, buttonMap, digitButtons, getApplicationContext());
         if (savedInstanceState != null) {

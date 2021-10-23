@@ -27,6 +27,8 @@ public class Calculator {
     public static final String PLUS = "+";
     public static final String MULTIPLICATION = "x";
     public static final String COMA = ".";
+    public static final String BRACKETS_OPEN = "(";
+    public static final String BRACKETS_CLOSE = ")";
 
     public enum Operation {
         ADD, SUB, DIV, MUL
@@ -210,6 +212,23 @@ public class Calculator {
             public void onClick(View v) {
                 expPrinter.append(COMA);
                 lastButtonPressed = CalcButton.COMA;
+            }
+        });
+
+        buttonMap.get(CalcButton.BRACKETS_OPEN).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expPrinter.append(BRACKETS_OPEN);
+                lastButtonPressed = CalcButton.BRACKETS_OPEN;
+            }
+        });
+
+
+        buttonMap.get(CalcButton.BRACKETS_CLOSE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expPrinter.append(BRACKETS_CLOSE);
+                lastButtonPressed = CalcButton.BRACKETS_CLOSE;
             }
         });
 

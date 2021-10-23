@@ -37,22 +37,39 @@
             android:layout_width="360dp"
             android:layout_height="240dp">
 
+            <Button
+                android:id="@+id/buttonBracketsOpen"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/bracketsOpen" />
+
+
+            <Button
+                android:id="@+id/buttonBracketsClose"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintStart_toEndOf="@id/buttonBracketsOpen"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/bracketsClose" />
 
             <Button
                 android:id="@+id/buttonMem1"
-                android:layout_width="120dp"
+                android:layout_width="60dp"
                 android:layout_height="60dp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/buttonBracketsClose"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="@string/mem1" />
 
             <Button
                 android:id="@+id/buttonMem2"
-                android:layout_width="120dp"
+                android:layout_width="60dp"
                 android:layout_height="60dp"
                 app:layout_constraintStart_toEndOf="@+id/buttonMem1"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="@string/mem2" />
+
 
             <Button
                 android:id="@+id/buttonBack"

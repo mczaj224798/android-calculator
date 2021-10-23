@@ -5,8 +5,8 @@
     <string name="minus">-</string>
     <string name="mul">x</string>
     <string name="div">/</string>
-    <string name="mem1">Mem 1</string>
-    <string name="mem2">Mem 2</string>
+    <string name="mem1">M1</string>
+    <string name="mem2">M2</string>
     <string name="zero">0</string>
     <string name="one">1</string>
     <string name="two">2</string>
@@ -36,6 +36,8 @@
     <string name="ln">ln</string>
     <string name="pro">%</string>
     <string name="sqrt">sqrt</string>
+    <string name="bracketsOpen">(</string>
+    <string name="bracketsClose">)</string>
 
     <string name="aboutContent">Calculator Mobile Application\nCreated by Maciej Czajkowski
     as an excercise.\nApplication can handle both basic and advanced calculations</string>
